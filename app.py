@@ -2,6 +2,7 @@ from starlette.applications import Starlette
 from starlette.requests import Request
 from starlette.routing import Route
 from starlette.templating import _TemplateResponse, Jinja2Templates
+from starlette.datastructures import FormData
 import uvicorn
 
 templates = Jinja2Templates(directory = "templates")
@@ -14,8 +15,8 @@ async def display_form(request: Request) -> _TemplateResponse:
 
 async def form(request: Request) -> _TemplateResponse:
     if request.method == "POST":
-        form_dictionary = await request.form()
-        form_dictionary_name = form_dictionary["name"]
+        form_dictionary: FormData = await request.form()
+        form_dictionary_name: str = str(form_dictionary["name"])
         
         return templates.TemplateResponse(request, "result.html", {"form_data" : [form_dictionary, form_dictionary_name]})
     
